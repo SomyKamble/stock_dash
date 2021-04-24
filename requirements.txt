@@ -1,0 +1,9 @@
+gunicorn
+pandas_datareader
+dash
+plotly
+pandas
+nsetools
+dash_extensions
+dash_core_components
+dash_html_components
