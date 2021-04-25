@@ -254,4 +254,6 @@ def update_value(input_data,start_date,end_date):
 
     return figure ,child ,name,fig ,Connections,Connections1,Stocks,Stocks1,Market,Market1,Profit,Profit1
 
-app.run_server(port=8001)
+if __name__ == '__main__':
+
+    app.run_server(debug=True)
