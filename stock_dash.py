@@ -7,7 +7,8 @@ import datetime
 import pandas as pd
 import dash_bootstrap_components as dbc
 import  plotly.express as px
-
+import plotly.graph_objects as go
+from alpha_vantage.timeseries import  TimeSeries
 from dash import Dash
 from dash_extensions import Lottie
 import nsetools
@@ -16,6 +17,25 @@ import nsetools
 
 from nsetools import Nse
 nse = Nse()
+
+top_gainers = nse.get_top_gainers()
+
+sample=top_gainers
+df=pd.DataFrame.from_dict(top_gainers)
+df.sort_values(by='openPrice', axis=0,ascending=False,inplace=True)
+# name = df['symbol'= df['openPrice'].sort_values(axis=0)]
+df=df.reset_index()
+# print(df['openPrice'][0],df['symbol'][0])
+fig = px.bar(df,x='symbol',y='openPrice',title="Top Gainer")
+fig.update_traces(marker_color='rgb(255,165,0)', marker_line_color='rgb(8,48,107)',
+                  marker_line_width=1.5)
+fig.update_layout(
+    plot_bgcolor="#1E434A",
+    paper_bgcolor="#1E434A",
+    font_color="white"
+)
+
+
 url_connections = "https://assets2.lottiefiles.com/packages/lf20_xa4vkunf.json"
 
 url_companies = "https://assets1.lottiefiles.com/packages/lf20_z10xyyny.json"
@@ -25,6 +45,8 @@ url_msg1= "https://assets10.lottiefiles.com/private_files/lf30_1l8zkdv6.json"
 url_stock2= "https://assets5.lottiefiles.com/packages/lf20_wvntgftp.json"
 
 url_profit ="https://assets4.lottiefiles.com/private_files/lf30_qKbFdb.json"
+
+url_logo ="https://assets8.lottiefiles.com/private_files/lf30_kanwuonz.json"
 
 options = dict(loop =True,autoplay = True,rendererSettings=dict(preservesAspectRatio='xMidYMid slice'))
 
@@ -72,8 +94,8 @@ dbc.Row([
             dbc.Card([
                     dbc.CardHeader(Lottie(options=options, width="100%", height="120%", url=url_companies)),
                     dbc.CardBody([
-                        html.H6(id="Companies",children=""),
-                        html.H2(id="content-companies", children="")
+                        html.H6(id="Companies",children=df['symbol'][0]),
+                        html.H2(id="content-companies", children=df['openPrice'][0])
 
                     ], style={'textAlign': 'center'}),
 
@@ -85,8 +107,8 @@ dbc.Col([
             dbc.Card([
                     dbc.CardHeader(Lottie(options=options, width="40%", height="15%", url=url_connections)),
                     dbc.CardBody([
-                        html.H6(id="Connections",children=""),
-                        html.H2(id="content-connections", children="0000")
+                        html.H6(id="Connections",children=df['symbol'][1]),
+                        html.H2(id="content-connections", children=df['openPrice'][1])
 
                     ], style={'textAlign': 'center'}),
 
@@ -96,8 +118,8 @@ dbc.Col([
             dbc.Card([
                     dbc.CardHeader(Lottie(options=options, width="40%", height="15%", url=url_msg1)),
                     dbc.CardBody([
-                        html.H6(id="Stocks",children=""),
-                        html.H2(id="content-stock", children="0000")
+                        html.H6(id="Stocks",children=df['symbol'][2]),
+                        html.H2(id="content-stock", children=df['openPrice'][2])
 
                     ], style={'textAlign': 'center'}),
 
@@ -108,8 +130,8 @@ dbc.Col([
             dbc.Card([
                     dbc.CardHeader(Lottie(options=options, width="40%", height="15%", url=url_stock2)),
                     dbc.CardBody([
-                        html.H6(id="Market",children=""),
-                        html.H2(id="content-market", children="0000")
+                        html.H6(id="Market",children=df['symbol'][3]),
+                        html.H2(id="content-market", children=df['openPrice'][3])
 
                     ], style={'textAlign': 'center'}),
 
@@ -120,8 +142,8 @@ dbc.Col([
             dbc.Card([
                     dbc.CardHeader(Lottie(options=options, width="29%", height="15%", url=url_profit)),
                     dbc.CardBody([
-                        html.H6(id="Profit",children=""),
-                        html.H2(id="content-profit", children="0000")
+                        html.H6(id="Profit",children=df['symbol'][4]),
+                        html.H2(id="content-profit", children=df['openPrice'][4])
 
                     ], style={'textAlign': 'center'}),
 
@@ -145,7 +167,8 @@ dbc.Row([
 dbc.Col([
             dbc.Card([
                 dbc.CardBody([
-                    dcc.Graph(id='bar-chart',figure={})
+
+                    dcc.Graph(id='bar-chart',figure=fig)
                 ])
             ])
         ], width=5)
@@ -173,17 +196,17 @@ dbc.Col([
 
 @app.callback(
     Output(component_id="line-chart" ,component_property='figure'),
-    Output(component_id="content-companies" ,component_property='children'),
-    Output(component_id="Companies" ,component_property='children'),
-    Output(component_id="bar-chart" ,component_property='figure'),
-    Output(component_id="Connections" ,component_property='children'),
-    Output(component_id="content-connections" ,component_property='children'),
-    Output(component_id="Stocks" ,component_property='children'),
-    Output(component_id="content-stock" ,component_property='children'),
-    Output(component_id="Market" ,component_property='children'),
-    Output(component_id="content-market" ,component_property='children'),
-    Output(component_id="Profit" ,component_property='children'),
-    Output(component_id="content-profit" ,component_property='children'),
+    # Output(component_id="content-companies" ,component_property='children'),
+    # Output(component_id="Companies" ,component_property='children'),
+    # # Output(component_id="bar-chart" ,component_property='figure'),
+    # Output(component_id="Connections" ,component_property='children'),
+    # Output(component_id="content-connections" ,component_property='children'),
+    # Output(component_id="Stocks" ,component_property='children'),
+    # Output(component_id="content-stock" ,component_property='children'),
+    # Output(component_id="Market" ,component_property='children'),
+    # Output(component_id="content-market" ,component_property='children'),
+    # Output(component_id="Profit" ,component_property='children'),
+    # Output(component_id="content-profit" ,component_property='children'),
     [Input(component_id="stock_name", component_property='value'),
      Input(component_id="my-date-picker-start", component_property='date'),
      Input(component_id="my-date-picker-end", component_property='date')]
@@ -214,46 +237,44 @@ def update_value(input_data,start_date,end_date):
 
     #figure.layout.plot_bgcolor = '#fff'
 
-    top_gainers = nse.get_top_gainers()
-
-    sample=top_gainers
-    df=pd.DataFrame.from_dict(top_gainers)
-
-
-    fig = px.bar(df,x='symbol',y='openPrice',title="Top Gainer")
-    fig.update_traces(marker_color='rgb(255,165,0)', marker_line_color='rgb(8,48,107)',
-                      marker_line_width=1.5)
-    fig.update_layout(
-        plot_bgcolor="#1E434A",
-        paper_bgcolor="#1E434A",
-        font_color="white"
-    )
-
-    print(sample[-1]['symbol'])
-
-    child= str(sample[-1]['openPrice'])
-    name= str(sample[-1]['symbol'])
+    # top_gainers = nse.get_top_gainers()
     #
-    Connections = str(sample[-2]['symbol'])
-    Connections1 = str(sample[-2]['openPrice'])
-
-    Stocks = str(sample[-3]['symbol'])
-
-    Stocks1 = str(sample[-3]['openPrice'])
-
-    Market = str(sample[-4]['symbol'])
+    # sample=top_gainers
+    # df=pd.DataFrame.from_dict(top_gainers)
     #
-    Market1 = str(sample[-4]['openPrice'])
-
-    Profit = str(sample[-5]['symbol'])
     #
-    Profit1 = str(sample[-5]['openPrice'])
+    # fig = px.bar(df,x='symbol',y='openPrice',title="Top Gainer")
+    # fig.update_traces(marker_color='rgb(255,165,0)', marker_line_color='rgb(8,48,107)',
+    #                   marker_line_width=1.5)
+    # fig.update_layout(
+    #     plot_bgcolor="#1E434A",
+    #     paper_bgcolor="#1E434A",
+    #     font_color="white"
+    # )
+
+    # print(sample[-1]['symbol'])
+    #
+    # child= str(sample[-1]['openPrice'])
+    # name= str(sample[-1]['symbol'])
+    # #
+    # Connections = str(sample[-2]['symbol'])
+    # Connections1 = str(sample[-2]['openPrice'])
+    #
+    # Stocks = str(sample[-3]['symbol'])
+    #
+    # Stocks1 = str(sample[-3]['openPrice'])
+    #
+    # Market = str(sample[-4]['symbol'])
+    # #
+    # Market1 = str(sample[-4]['openPrice'])
+    #
+    # Profit = str(sample[-5]['symbol'])
+    # #
+    # Profit1 = str(sample[-5]['openPrice'])
 
 
 
 
-    return figure ,child ,name,fig ,Connections,Connections1,Stocks,Stocks1,Market,Market1,Profit,Profit1
+    return figure
 
-if __name__ == '__main__':
-
-    app.run_server(debug=True)
+app.run_server(debug=False)
