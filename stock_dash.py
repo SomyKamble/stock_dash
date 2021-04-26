@@ -10,22 +10,24 @@ import  plotly.express as px
 
 from dash import Dash
 from dash_extensions import Lottie
-import nsetools
+# import nsetools
 
 
 
 
 
-from nsetools import Nse
-nse = Nse()
-
-top_gainers = nse.get_top_gainers()
-
-sample=top_gainers
-df=pd.DataFrame.from_dict(top_gainers)
-df.sort_values(by='openPrice', axis=0,ascending=False,inplace=True)
-# name = df['symbol'= df['openPrice'].sort_values(axis=0)]
-df=df.reset_index()
+# from nsetools import Nse
+# nse = Nse()
+#
+# top_gainers = nse.get_top_gainers()
+#
+# sample=top_gainers
+# df=pd.DataFrame.from_dict(top_gainers)
+# df.sort_values(by='openPrice', axis=0,ascending=False,inplace=True)
+# # name = df['symbol'= df['openPrice'].sort_values(axis=0)]
+# df=df.reset_index()
+# df.to_csv('top_gainer.csv')
+df=pd.read_csv('top_gainer.csv')
 # print(df['openPrice'][0],df['symbol'][0])
 fig = px.bar(df,x='symbol',y='openPrice',title="Top Gainer")
 fig.update_traces(marker_color='rgb(255,165,0)', marker_line_color='rgb(8,48,107)',
@@ -280,4 +282,4 @@ def update_value(input_data,start_date,end_date):
 
 if __name__ == '__main__':
 
-    app.run_server(debug=True)
+    app.run_server(debug=False)
