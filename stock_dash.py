@@ -10,6 +10,8 @@ import  plotly.express as px
 
 from dash import Dash
 from dash_extensions import Lottie
+import nsetools
+
 
 
 
@@ -276,6 +278,6 @@ def update_value(input_data,start_date,end_date):
 
     return figure
 
-
 if __name__ == '__main__':
-    app.run_server(debug=False)
+
+    app.run_server(debug=True)
