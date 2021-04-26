@@ -277,4 +277,6 @@ def update_value(input_data,start_date,end_date):
 
     return figure
 
-app.run_server(debug=False)
+
+if __name__ == '__main__':
+    app.run_server(debug=False)
