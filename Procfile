@@ -1,1 +1,1 @@
-web: gunicorn stock_dash:server
+web: gunicorn stock_dash:server --timeout 25 --keep-alive 5 --log-level debug
