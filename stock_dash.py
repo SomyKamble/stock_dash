@@ -7,11 +7,10 @@ import datetime
 import pandas as pd
 import dash_bootstrap_components as dbc
 import  plotly.express as px
-import plotly.graph_objects as go
-from alpha_vantage.timeseries import  TimeSeries
+
 from dash import Dash
 from dash_extensions import Lottie
-import nsetools
+
 
 
 
